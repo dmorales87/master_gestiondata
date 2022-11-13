@@ -31,6 +31,14 @@ class TweetTextNormalizer(sklearn.base.BaseEstimator, sklearn.base.TransformerMi
             self.stemmer = False
         
         if lemmatize:
+          if language='english'
+            try:
+                import en_core_web_sm as eng
+            
+                self.parser = spa.load() # Cargamos el parser en español
+            except ImportError:
+                raise ImportError('El modelo en ingles no está instalado. Ejecute python -m spacy download en_core_web_sm')
+            self.lemmatizer = lambda word : " ".join([token.lemma_ for token in self.parser(word)]) # Creamos un lemmatizer
           if language ='spanish':
             try:
                 import es_core_news_sm as spa
@@ -39,14 +47,7 @@ class TweetTextNormalizer(sklearn.base.BaseEstimator, sklearn.base.TransformerMi
             except ImportError:
                 raise ImportError('El modelo en español no está instalado. Ejecute python -m spacy download es_core_news_sm')
             self.lemmatizer = lambda word : " ".join([token.lemma_ for token in self.parser(word)]) # Creamos un lemmatizer
-          if language='english'
-            try:
-                import en_core_web_sm as spa
-            
-                self.parser = spa.load() # Cargamos el parser en español
-            except ImportError:
-                raise ImportError('El modelo en español no está instalado. Ejecute python -m spacy download en_core_web_sm')
-            self.lemmatizer = lambda word : " ".join([token.lemma_ for token in self.parser(word)]) # Creamos un lemmatizer
+
         else:
             self.lemmatizer = False
         
