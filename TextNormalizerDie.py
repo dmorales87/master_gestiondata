@@ -16,7 +16,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize.casual import TweetTokenizer
 
-class TweetTextNormalizer(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
+class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
     def __init__(self, language='english', lemmatize=True, stem=False, reduce_len=True, strip_handles=True, strip_stopwords=True, strip_urls=True, strip_accents=True, token_min_len=-1, preserve_case=True, text_to_sequence=False):
         """Un normalizador de texto pensado para procesamiento de Tweets en español. Este normalizador puede devolver o bien un texto transformado o bien una secuencia de tokens si se
         indica el parametro `text_to_sequence`. Dentro de los procesamientos disponibles son lemmatization, stemming, reducir la longitud de caracteres repetidos, eliminar handles, 
