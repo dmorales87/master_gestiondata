@@ -31,7 +31,7 @@ class TweetTextNormalizer(sklearn.base.BaseEstimator, sklearn.base.TransformerMi
             self.stemmer = False
         
         if lemmatize:
-          if language='english'
+          if language='english':
             try:
                 import en_core_web_sm as eng
             
