@@ -14,7 +14,7 @@ import re
 import sklearn
 import nltk
 from nltk.corpus import stopwords
-from nltk.tokenize.casual import TweetTokenizer
+from nltk.tokenize import  word_tokenize
 
 class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin):
     def __init__(self, language='english', lemmatize=True, stem=False, reduce_len=True, strip_handles=True, strip_stopwords=True, strip_urls=True, strip_accents=True, token_min_len=-1, preserve_case=True, text_to_sequence=False):
@@ -22,32 +22,21 @@ class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin)
         indica el parametro `text_to_sequence`. Dentro de los procesamientos disponibles son lemmatization, stemming, reducir la longitud de caracteres repetidos, eliminar handles, 
         eliminar URLs, eliminar mayusculas."""
         
-        self.tokenizer = TweetTokenizer(strip_handles=strip_handles, 
-                                        reduce_len=reduce_len,
-                                        preserve_case=preserve_case) # Creamos un tokenizer
+        self.tokenizer = word_tokenize() # Creamos un tokenizer
+        
         if stem:
             self.stemmer = nltk.stem.SnowballStemmer(language=language) # Creamos un steammer
         else:
             self.stemmer = False
         
         if lemmatize:
-          if language='english':
-            try:
+          try:
                 import en_core_web_sm as eng
             
-                self.parser = spa.load() # Cargamos el parser en español
+                self.parser = eng.load() # Cargamos el parser en español
             except ImportError:
                 raise ImportError('El modelo en ingles no está instalado. Ejecute python -m spacy download en_core_web_sm')
             self.lemmatizer = lambda word : " ".join([token.lemma_ for token in self.parser(word)]) # Creamos un lemmatizer
-          if language ='spanish':
-            try:
-                import es_core_news_sm as spa
-            
-                self.parser = spa.load() # Cargamos el parser en español
-            except ImportError:
-                raise ImportError('El modelo en español no está instalado. Ejecute python -m spacy download es_core_news_sm')
-            self.lemmatizer = lambda word : " ".join([token.lemma_ for token in self.parser(word)]) # Creamos un lemmatizer
-
         else:
             self.lemmatizer = False
         
