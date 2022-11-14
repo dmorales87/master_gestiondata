@@ -22,8 +22,6 @@ class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin)
         indica el parametro `text_to_sequence`. Dentro de los procesamientos disponibles son lemmatization, stemming, reducir la longitud de caracteres repetidos, eliminar handles, 
         eliminar URLs, eliminar mayusculas."""
         
-        self.tokenizer = word_tokenize() # Creamos un tokenizer
-        
         if stem:
             self.stemmer = nltk.stem.SnowballStemmer(language=language) # Creamos un steammer
         else:
@@ -31,12 +29,12 @@ class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin)
         
         if lemmatize:
           try:
-                import en_core_web_sm as eng
+              import en_core_web_sm as eng
             
-                self.parser = eng.load() # Cargamos el parser en español
-            except ImportError:
+              self.parser = eng.load() # Cargamos el parser en español
+          except ImportError:
                 raise ImportError('El modelo en ingles no está instalado. Ejecute python -m spacy download en_core_web_sm')
-            self.lemmatizer = lambda word : " ".join([token.lemma_ for token in self.parser(word)]) # Creamos un lemmatizer
+          self.lemmatizer = lambda word : " ".join([token.lemma_ for token in self.parser(word)]) # Creamos un lemmatizer
         else:
             self.lemmatizer = False
         
@@ -54,7 +52,7 @@ class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin)
     def process_text(self, text):
         """Procesa una secuencia de texto de acuerdo a la configuración del normalizador. Este método
         devuelve una secuencia de tokens."""
-        tokens = self.tokenizer.tokenize(text)
+        tokens = word_tokenize(text)
 
         if self.strip_urls:
             tokens = [token for token in tokens if not re.match(self.urls_regex, token)]
