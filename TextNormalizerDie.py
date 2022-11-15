@@ -21,7 +21,7 @@ class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin)
         """Un normalizador de texto pensado para procesamiento de Tweets en español. Este normalizador puede devolver o bien un texto transformado o bien una secuencia de tokens si se
         indica el parametro `text_to_sequence`. Dentro de los procesamientos disponibles son lemmatization, stemming, reducir la longitud de caracteres repetidos, eliminar handles, 
         eliminar URLs, eliminar mayusculas."""
-        
+
         if stem:
             self.stemmer = nltk.stem.SnowballStemmer(language=language) # Creamos un steammer
         else:
@@ -45,7 +45,7 @@ class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin)
         self.strip_stopwords = strip_stopwords
         self.strip_accents = strip_accents
         self.strip_urls = strip_urls
-        self.urls_regex = re.compile('http\S+') # Usamos una expresion regular para encontrar las URLs
+        self.urls_regex = re.compile('[^\w\s]') #re.compile('http\S+') # Usamos una expresion regular para encontrar las URLs
         self.token_min_len = token_min_len
         self._text_to_sequence = text_to_sequence
     
@@ -75,6 +75,11 @@ class TextNormalizerD(sklearn.base.BaseEstimator, sklearn.base.TransformerMixin)
         if self._text_to_sequence:
             for doc in X:
                 yield self.process_text(text=doc)
+
+    #def transform(self, X):
+    #    for doc in X:
+    #        yield ' '.join(self.process_text(text=doc))
+
         else:
             for doc in X:
                 yield ' '.join(self.process_text(text=doc))
